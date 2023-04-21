@@ -1,0 +1,137 @@
+<body>
+<div id="header">
+    <div id="dropmeny">
+        <label>
+            <input type="checkbox" id="ps4" name="ps4" bind:checked={pcCheck} placeholder="ps4">
+            ps4
+        </label>
+        <label>
+            <input type="checkbox" id="pc" name="pc" bind:checked={ps4Check} placeholder="ps4">
+            <label for="pc">pc</label>
+        </label>
+        <label>
+            <input type="checkbox" id="both" name="both" bind:checked={bothCheck} placeholder="both">
+            <label for="both">both</label>
+        </label>
+    </div>
+    <div id="search" class="border-2 border-red-500 bg-black">
+        <input type="text" placeholder="søk etter spill" class="bg-zinic-200" bind:value={search}>
+    </div>
+</div>
+
+<!-- 
+{#if data.spill.platform}
+    <p>{data.spill.title}</p>
+{/if} -->
+<main>
+    {#if search}
+    <!-- søkefunksjonen -->
+    <!-- funker ikke på pc -->
+                {#each alleSpill as platformlist}
+                    {#each platformlist as {title, image}}
+                        {#if title.toLowerCase().includes(search.toLowerCase())}
+                            <Gamecard> {title}  </Gamecard>
+                        {/if} 
+                    {/each}
+                {/each}
+            {:else}
+            <!-- checkboxer for pc og ps4, ser ut som at den ikke vil lese pc og ps4 -->
+        {#if pcCheck}   
+            {#each pc as {title, platform}}
+                <Gamecard >{title}:{platform} </Gamecard>
+            {/each}
+        {/if}
+        {#if ps4Check}
+            {#each spill as { title, platform}}
+                <Gamecard >{title}:{platform} </Gamecard>
+            {/each}
+        {/if}
+    {/if}
+</main>
+
+
+</body>
+<script>
+    import Gamecard from './gamecard.svelte';
+    export let data;
+    import '../app.css'
+
+   let spill = data.spill
+// dictionaries
+   let ps4 = []
+   let pc = []
+   let both = []
+
+   let pcCheck = true
+   let ps4Check = true 
+   let bothCheck = true
+//    her gir jeg objektene mine en verdig utifra spill platformen
+    for (let i = 0; i < data.spill.length; i++) {
+        let s = data.spill[i]
+        if (data.spill[i].platform == "ja") {
+            pc.push(data.spill[i])
+        } else if (data.spill.platform == "nei") {
+            ps4.push(data.spill[i])
+        }  else if (data.spill.platform == "begge") {
+            both.push(s)
+        }
+
+        let games = data.spill[i]
+    }
+    let platform = data.spill.platform
+
+    let alleSpill = [pc, ps4, both] 
+    let search = ""
+
+</script>
+
+<style>
+   
+   img{
+    background-size: cover;
+    width: 100%;
+   }
+
+    #header{
+        display: flex;
+    }
+
+    main{
+        margin: auto;
+        border: 1px red solid;
+        width: max-content;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+    }
+
+    body{
+        color: white;
+        letter-spacing: 1px;
+        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 4fr));
+
+        background-color: rgb(24, 24, 27);
+        display:flex;
+        flex-direction: column;
+    }
+    #dropmeny{
+        display: flex;
+        flex-direction: column;
+    }
+    
+</style>
+
+
+<!-- kilder -->
+
+cards
+<!-- https://svelte.dev/docs -->
+
+sanity bilder
+<!-- https://www.sanity.io/docs/presenting-images -->
+
+problemer 500
+<!-- https://stackoverflow.com/questions/73225172/as-the-code-is-correct-i-am-still-getting-syntax-error-due-to-unknown-reason -->
+
+søkefunksjonen
+<!-- søkefunksjonenhttps://svelte.dev/repl/e6439904f18f453e80feab69b371d0ea?version=3.57.0 -->
